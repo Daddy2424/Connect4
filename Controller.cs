@@ -9,40 +9,52 @@ namespace Connect4_Final_Ptoject
 {
     internal class Controller : Player
     {
-        private GameBoard _gameBoard;
-        private string[,] _arr;
-        private int _rows;
-        private int _columns;
+        // creating a new AiGameboard as child of Gameboard
+        readonly AiGameBoard gameBoard = new AiGameBoard(6, 7);
 
-
-        public Controller(GameBoard gameBoard)
+        public Controller()
         {
-            _gameBoard = gameBoard;
-            _arr = gameBoard.Array;
-            _rows = gameBoard.Rows;
-            _columns = gameBoard.Columns;
         }
 
         public void GameBoardDisplay()
         {
-            _gameBoard.GameBoardDisplay();
+            gameBoard.GameBoardDisplay();
         }
 
         public void PlayGame(Controller controller, Menu menu)
         {
-            _gameBoard.PlayGame(controller, menu);
+            gameBoard.PlayGame(controller, menu);
+        }
+
+        public void AiPlayGame(Controller controller, Menu menu)
+        {
+            gameBoard.AiPlayGame(controller, menu); 
         }
 
         public void ChangeBoard(int selectedCol, string playerTurn)
         {
-           _gameBoard.ChangeBoard(selectedCol, playerTurn);
+           gameBoard.ChangeBoard(selectedCol, playerTurn);
         }
 
         public bool CheckWin(string playerTurn)
         {
-           return _gameBoard.CheckWin(playerTurn);
+           return gameBoard.CheckWin(playerTurn);
         }
 
+        public bool IsFull()
+        {
+            return gameBoard.IsFull();
+        }
+
+        public void ResetBoard()
+        {
+            gameBoard.ResetBoard();
+        }
+
+        public void AiLogic(Controller controller)
+        {
+            gameBoard.AiLogic(controller);
+        }
 
     }
 }
