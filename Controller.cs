@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Connect4_Final_Ptoject
 {
-    internal class Controller
+    internal class Controller : Player
     {
         private GameBoard _gameBoard;
         private string[,] _arr;
@@ -23,25 +23,26 @@ namespace Connect4_Final_Ptoject
             _columns = gameBoard.Columns;
         }
 
+        public void GameBoardDisplay()
+        {
+            _gameBoard.GameBoardDisplay();
+        }
+
+        public void PlayGame(Controller controller, Menu menu)
+        {
+            _gameBoard.PlayGame(controller, menu);
+        }
 
         public void ChangeBoard(int selectedCol, string playerTurn)
         {
-            if (selectedCol >= 1 && selectedCol <= _columns)
-            {
-                int row = _rows - 1;
-                while (row >= 0)
-                {
-                    if (_arr[row, selectedCol - 1] == "-")
-                    {
-                        _arr[row, selectedCol - 1] = playerTurn;
-                        return;
-                    }
-                    row--;
-                }
-            }
-            Console.WriteLine("Column is full! no chance no more...");
-            Thread.Sleep(2000);
+           _gameBoard.ChangeBoard(selectedCol, playerTurn);
         }
+
+        public bool CheckWin(string playerTurn)
+        {
+           return _gameBoard.CheckWin(playerTurn);
+        }
+
 
     }
 }
