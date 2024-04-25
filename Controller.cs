@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Connect4_Final_Ptoject
 {
-    internal class Controller : Player
+    internal class Controller : GameBoard
     {
         // creating a new AiGameboard as child of Gameboard
         readonly AiGameBoard gameBoard = new AiGameBoard(6, 7);
@@ -16,12 +16,12 @@ namespace Connect4_Final_Ptoject
         {
         }
 
-        public void GameBoardDisplay()
+        public override void GameBoardDisplay()
         {
             gameBoard.GameBoardDisplay();
         }
 
-        public void PlayGame(Controller controller, Menu menu)
+        public override void PlayGame(Controller controller, Menu menu)
         {
             gameBoard.PlayGame(controller, menu);
         }
@@ -31,22 +31,22 @@ namespace Connect4_Final_Ptoject
             gameBoard.AiPlayGame(controller, menu); 
         }
 
-        public void ChangeBoard(int selectedCol, string playerTurn)
+        public override void ChangeBoard(int selectedCol, string playerTurn)
         {
            gameBoard.ChangeBoard(selectedCol, playerTurn);
         }
 
-        public bool CheckWin(string playerTurn)
+        public override bool CheckWin(string playerTurn)
         {
            return gameBoard.CheckWin(playerTurn);
         }
 
-        public bool IsFull()
+        public override bool IsFull()
         {
             return gameBoard.IsFull();
         }
 
-        public void ResetBoard()
+        public override void ResetBoard()
         {
             gameBoard.ResetBoard();
         }
