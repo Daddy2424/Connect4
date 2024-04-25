@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -29,10 +29,11 @@ namespace Connect4_Final_Ptoject
             }
         }
 
-
-        public void AiPlayGame(Controller controller, Menu menu)
+        // Same as playgame function but player 2 is AI 
+        virtual public void AiPlayGame(Controller controller, Menu menu)
         {
             Console.Clear();
+            Sounds s = new Sounds();
             var originalMargin = (Console.WindowWidth - 6) / 2;
             var leftMargin = (Console.WindowWidth - 21) / 2;
             var centerMargin = (Console.WindowWidth - 31) / 2;
@@ -64,6 +65,8 @@ namespace Connect4_Final_Ptoject
             Console.CursorLeft = originalMargin;
             Program.typeWrite("....", 1000);
             Thread.Sleep(1000);
+            s.StopBgm();
+            s.PlayMatch();
 
             int exit = 0;
             int i = 0;
@@ -76,6 +79,7 @@ namespace Connect4_Final_Ptoject
                 // check draw
                 if (controller.IsFull())
                 {
+                    s.StopMatch();
                     Console.Clear();
                     Console.WriteLine(" ");
                     Console.WriteLine(" ");
@@ -102,6 +106,7 @@ namespace Connect4_Final_Ptoject
                 // Check win
                 if (controller.CheckWin(player1.Turn))
                 {
+                    s.StopMatch();
                     Console.Clear();
                     Console.WriteLine(" ");
                     Console.WriteLine(" ");
@@ -128,6 +133,7 @@ namespace Connect4_Final_Ptoject
                 }
                 if (controller.CheckWin(player2.Turn))
                 {
+                    s.StopMatch();
                     Console.Clear();
                     Console.WriteLine(" ");
                     Console.WriteLine(" ");
@@ -193,6 +199,7 @@ namespace Connect4_Final_Ptoject
                 // Check draw
                 if (controller.IsFull())
                 {
+                    s.StopMatch();
                     Console.Clear();
                     Console.WriteLine(" ");
                     Console.WriteLine(" ");
@@ -219,6 +226,7 @@ namespace Connect4_Final_Ptoject
                 // Check win
                 if (controller.CheckWin(player1.Turn))
                 {
+                    s.StopMatch();
                     Console.Clear();
                     Console.WriteLine(" ");
                     Console.WriteLine(" ");
@@ -244,12 +252,13 @@ namespace Connect4_Final_Ptoject
                 }
                 if (controller.CheckWin(player2.Turn))
                 {
+                    s.StopMatch();
                     Console.Clear();
                     Console.WriteLine(" ");
                     Console.WriteLine(" ");
                     Console.WriteLine(" ");
                     Console.CursorLeft = leftMargin;
-                    Console.WriteLine("CONGRATS {0} You Won !", player2.Name);
+                    Console.WriteLine("{0} Won !", player2.Name);
                     Console.WriteLine(" ");
                     Console.WriteLine(" ");
                     Console.WriteLine(" ");
@@ -272,12 +281,10 @@ namespace Connect4_Final_Ptoject
                 {
                     Console.WriteLine(" ");
                     Console.WriteLine(" ");
-                    Console.CursorLeft = centerMargin;
-                    Console.Write("Its now AI turn : ");
-
+                    Program.ConsoleCenter("AI Turn");
                     controller.AiLogic(controller);
                     i = 0;
-                    Thread.Sleep(2000);
+                    Thread.Sleep(1500);
 
                 }
 
@@ -285,11 +292,111 @@ namespace Connect4_Final_Ptoject
             } while (exit == 0);
         }
 
-        public void AiLogic(Controller controller)
+        // I tryed my maximun to implement logic for AI but its still not getting that good
+        virtual public void AiLogic(Controller controller)
         {
             Random rand = new Random();
             int selectedCol = rand.Next(1, 8);
+
+            // Checking for winning moves by the player and blocking them
+            for (int i = 0; i < _rows; i++)
+            {
+                for (int j = 0; j < _columns - 3; j++)
+                {
+                    if ((_arr[i, j]) == player1.Turn &&
+                        _arr[i, j + 1] == player1.Turn &&
+                        _arr[i, j + 2] == player1.Turn &&
+                        _arr[i, j + 3] == "-")
+                    {
+                        selectedCol = j + 4; 
+                        controller.ChangeBoard(selectedCol, player2.Turn); 
+                        return;
+                    }
+                }
+            }
+
+
+            for (int i = 0; i < _columns; i++)
+            {
+                for (int j = 0; j < _rows - 3; j++)
+                {
+                    if ((_arr[j, i]) == player1.Turn &&
+                        _arr[j + 1, i] == player1.Turn &&
+                        _arr[j + 2, i] == player1.Turn &&
+                        _arr[j + 3, i] == "-")
+                    {
+                        selectedCol = i + 1;
+                        controller.ChangeBoard(selectedCol, player2.Turn); 
+                        return;
+                    }
+                }
+            }
+
+            // AI winning moves
+            for (int i = 0; i < _rows; i++)
+            {
+                for (int j = 0; j < _columns - 3; j++)
+                {
+                    if (_arr[i, j] == player2.Turn &&
+                        _arr[i, j + 1] == player2.Turn &&
+                        _arr[i, j + 2] == player2.Turn)
+                    {
+                        selectedCol = j + 4; 
+                        controller.ChangeBoard(selectedCol, player2.Turn);
+                        return;
+                    }
+                }
+            }
+
+            for (int i = 0; i < _columns; i++)
+            {
+                for (int j = 0; j < _rows - 3; j++)
+                {
+                    if (_arr[j, i] == player2.Turn &&
+                        _arr[j + 1, i] == player2.Turn &&
+                        _arr[j + 2, i] == player2.Turn)
+                    {
+                        selectedCol = i + 1; 
+                        controller.ChangeBoard(selectedCol, player2.Turn);
+                        return;
+                    }
+                }
+            }
+
+            for (int i = 0; i < _rows; i++)
+            {
+                for (int j = 0; j < _columns - 3; j++)
+                {
+                    if (_arr[i, j] == player2.Turn &&
+                        _arr[i, j + 1] == player2.Turn &&
+                        _arr[i, j + 2] == "-")
+                    {
+                        selectedCol = j + 3; 
+                        controller.ChangeBoard(selectedCol, player2.Turn);
+                        return;
+                    }
+                }
+            }
+
+            
+            for (int i = 0; i < _columns; i++)
+            {
+                for (int j = 0; j < _rows - 3; j++)
+                {
+                    if (_arr[j, i] == player2.Turn &&
+                        _arr[j + 1, i] == player2.Turn &&
+                        _arr[j + 2, i] == "-")
+                    {
+                        selectedCol = i + 1; 
+                        controller.ChangeBoard(selectedCol, player2.Turn );
+                        return;
+                    }
+                }
+            }
+
+
             controller.ChangeBoard(selectedCol, player2.Turn);
+
         }
 
     }
