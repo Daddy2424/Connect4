@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,12 +9,15 @@ namespace Connect4_Final_Ptoject
 {
     internal class Menu
     {
+        // displays menu and all pathways
         public void MenuDisplay(Controller controller, Menu menu)
         {
+            Sounds s = new Sounds();
             Console.Clear();
             var leftMargin = (Console.WindowWidth - 11) / 2;
             Console.WriteLine(" ");
             Console.WriteLine(" ");
+            s.PlayBgm();
             Console.CursorLeft = leftMargin;
             Program.typeWrite("CONNECT FOUR");
             Console.WriteLine(" ");
@@ -30,7 +33,16 @@ namespace Connect4_Final_Ptoject
             Program.ConsoleCenter("3. Exit ");
             Console.WriteLine(" ");
             Console.WriteLine(" ");
+            Program.ConsoleCenter(" // More options coming soon //");
+            Console.WriteLine(" ");
+            Console.WriteLine(" ");
 
+            int originalCursorTop = Console.CursorTop;
+            Console.SetCursorPosition(0, Console.WindowHeight - 3);
+            Program.ConsoleCenter("Copyright © 2024 Deepak Poly. All rights reserved.");
+            Console.WriteLine(" ");
+            Program.ConsoleCenter("PIXELPULSE Studios");
+            Console.SetCursorPosition(0, originalCursorTop);
 
 
             while (true)
@@ -61,6 +73,11 @@ namespace Connect4_Final_Ptoject
                 else if (inputStr == "2")
                 {
                     Console.Clear();
+                    Program.ConsoleCenter("Player Vs AI (Beta version)");
+                    Console.WriteLine(" ");
+                    Console.WriteLine(" ");
+                    Program.ConsoleCenter(" Press any key to continue ");
+                    Console.ReadKey();
                     controller.ResetBoard();
                     controller.AiPlayGame(controller, menu);
                 }
@@ -78,6 +95,8 @@ namespace Connect4_Final_Ptoject
                     MenuDisplay(controller, menu);
                 }
             }
+
+            
         }
 
     }
