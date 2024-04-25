@@ -13,6 +13,9 @@ namespace Connect4_Final_Ptoject
         private int _columns;
         private string[,] _arr;
 
+        public GameBoard()
+        { }
+
         public GameBoard(int rows, int columns)
         {
             _rows = rows;
@@ -44,7 +47,8 @@ namespace Connect4_Final_Ptoject
             get { return _columns; }
         }
 
-        public void GameBoardDisplay()
+        // function to display gameboard
+        virtual public void GameBoardDisplay()
         {
             Console.WriteLine(" ");
             Program.ConsoleCenter("CONNECT FOUR");
@@ -76,29 +80,42 @@ namespace Connect4_Final_Ptoject
                 Console.Write(" ");
             }
         }
-
-        public void ChangeBoard(int selectedCol, string playerTurn)
+        
+        // function to change board state
+        virtual public void ChangeBoard(int selectedCol, string playerTurn)
         {
-            if (selectedCol >= 1 && selectedCol <= _columns)
+            while (true)
             {
-                int row = _rows - 1;
-                while (row >= 0)
+                if (selectedCol >= 1 && selectedCol <= _columns)
                 {
-                    if (_arr[row, selectedCol - 1] == "-")
+                    int row = _rows - 1;
+                    while (row >= 0)
                     {
-                        _arr[row, selectedCol - 1] = playerTurn;
-                        return;
+                        if (_arr[row, selectedCol - 1] == "-")
+                        {
+                            _arr[row, selectedCol - 1] = playerTurn;
+                            return;
+                        }
+                        row--;
                     }
-                    row--;
                 }
+                Console.WriteLine(" ");
+                Program.ConsoleCenter("Column is full!");
+                Thread.Sleep(1000);
+
+                Console.WriteLine(" ");
+                Console.WriteLine(" ");
+                Program.ConsoleCenter("Please choose another column: ");
+                selectedCol = int.Parse(Console.ReadLine());
             }
-            Console.WriteLine("Column is full! no chance no more...");
-            Thread.Sleep(2000);
+            
         }
 
-        public void PlayGame(Controller controller,Menu menu)
+        // play game function (All game logic goes here)
+        virtual public void PlayGame(Controller controller,Menu menu)
         {
             Console.Clear();
+            Sounds s = new Sounds();
             var originalMargin = (Console.WindowWidth - 6) / 2;
             var leftMargin = (Console.WindowWidth - 21) / 2;
             var centerMargin = (Console.WindowWidth - 31) / 2;
@@ -132,6 +149,8 @@ namespace Connect4_Final_Ptoject
             Console.CursorLeft = originalMargin;
             Program.typeWrite("...." , 1000);
             Thread.Sleep(1000);
+            s.StopBgm();
+            s.PlayMatch();
 
             int exit = 0;
             int i = 0;
@@ -155,6 +174,7 @@ namespace Connect4_Final_Ptoject
                     Console.WriteLine(" ");
                     while (true)
                     {
+                        s.StopMatch();
                         Program.ConsoleCenter("Enter X to go to menu : ");
                         string input = Console.ReadLine();
                         if (input.ToLower() == "x")
@@ -170,6 +190,7 @@ namespace Connect4_Final_Ptoject
                 // Check win
                 if (controller.CheckWin(player1.Turn))
                 {
+                    s.StopMatch();
                     Console.Clear();
                     Console.WriteLine(" ");
                     Console.WriteLine(" ");
@@ -196,6 +217,7 @@ namespace Connect4_Final_Ptoject
                 }
                 if (controller.CheckWin(player2.Turn))
                 {
+                    s.StopMatch();
                     Console.Clear();
                     Console.WriteLine(" ");
                     Console.WriteLine(" ");
@@ -261,6 +283,7 @@ namespace Connect4_Final_Ptoject
                 // Check draw
                 if (controller.IsFull())
                 {
+                    s.StopMatch();
                     Console.Clear();
                     Console.WriteLine(" ");
                     Console.WriteLine(" ");
@@ -287,6 +310,7 @@ namespace Connect4_Final_Ptoject
                 // Check win
                 if (controller.CheckWin(player1.Turn))
                 {
+                    s.StopMatch();
                     Console.Clear();
                     Console.WriteLine(" ");
                     Console.WriteLine(" ");
@@ -312,6 +336,7 @@ namespace Connect4_Final_Ptoject
                 }
                 if (controller.CheckWin(player2.Turn))
                 {
+                    s.StopMatch();
                     Console.Clear();
                     Console.WriteLine(" ");
                     Console.WriteLine(" ");
@@ -338,6 +363,7 @@ namespace Connect4_Final_Ptoject
                 Console.WriteLine(" ");
                 while (i == 1)
                 {
+
                     Console.WriteLine(" ");
                     Console.WriteLine(" ");
                     Console.CursorLeft = centerMargin;
@@ -371,7 +397,7 @@ namespace Connect4_Final_Ptoject
             } while (exit == 0);
         }
 
-         public bool CheckWin(string playerTurn)
+         virtual public bool CheckWin(string playerTurn)
         {
             // check horizontal wins
             for (int i = 0; i < _rows; i++)
@@ -383,6 +409,7 @@ namespace Connect4_Final_Ptoject
                         _arr[i, j + 2] == playerTurn &&
                         _arr[i, j + 3] == playerTurn)
                     {
+                        Thread.Sleep(1000);
                         return true;
                     }
                 }
@@ -398,6 +425,7 @@ namespace Connect4_Final_Ptoject
                         _arr[j + 2, i] == playerTurn &&
                         _arr[j + 3, i] == playerTurn)
                     {
+                        Thread.Sleep(1000);
                         return true;
                     }
                 }
@@ -413,6 +441,7 @@ namespace Connect4_Final_Ptoject
                         _arr[i + 2, j + 2] == playerTurn &&
                         _arr[i + 3, j + 3] == playerTurn)
                     {
+                        Thread.Sleep(1000);
                         return true;
                     }
                 }
@@ -427,6 +456,7 @@ namespace Connect4_Final_Ptoject
                         _arr[i + 2, j - 2] == playerTurn &&
                         _arr[i + 3, j - 3] == playerTurn)
                     {
+                        Thread.Sleep(1000);
                         return true;
                     }
                 }
@@ -435,8 +465,8 @@ namespace Connect4_Final_Ptoject
             return false;
         }
 
-       
-        public bool IsFull()
+       // if board is full
+        virtual public bool IsFull()
         {
             for (int i = 0; i < _rows; i++)
             {
@@ -452,7 +482,8 @@ namespace Connect4_Final_Ptoject
             return true;
         }
 
-        public void ResetBoard()
+        // function to reset board
+        virtual public void ResetBoard()
         {
             for (int i = 0; i < _rows; i++)
             {
