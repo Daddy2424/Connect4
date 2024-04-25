@@ -1,3 +1,8 @@
+
+// Final Project
+// Author : Deepak Poly
+// Course : SODV 1202
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,10 +16,18 @@ namespace Connect4_Final_Ptoject
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Press any key : ");
+            Console.CursorVisible = false;
+            Console.WriteLine("Hello there! ");
+            Console.WriteLine("The game is all center aligned. So befor playing the game please set the console size full or stable.");
+            Console.WriteLine(" ");
+            Console.WriteLine("HEADPHONES recommended // ");
+            Console.WriteLine("Press any key to start the game !");
             Console.ReadKey();
-            ConsoleCenter("CONNECT FOUR");
-            
+
+            Console.Clear();
+
+            Credits c = new Credits();
+            c.ShowCredits();
 
             // Setting controller for gameboard
             Controller controller = new Controller();
